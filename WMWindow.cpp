@@ -21,12 +21,15 @@ void WMWindow::closeEvent (QCloseEvent *event)
 
 void WMWindow::init()
 {
-	setAttribute(Qt::WA_DeleteOnClose);
+	//setAttribute(Qt::WA_DeleteOnClose);
 
 	setWindowTitle ("WorkMap");
 
-	tree = new QTreeWidget(this);
-	tree->setHeaderLabel (tr("work tree"));
+	QStandardItemModel *model = new QStandardItemModel;
+	tree = new QTreeView;
+	tree->setModel (model);
+	//tree->setHeaderHidden(true);	Эта штука появилась в QT4.4
+
 	setCentralWidget(tree);
 
 	createActions();

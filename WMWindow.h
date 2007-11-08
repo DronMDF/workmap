@@ -1,7 +1,7 @@
 
 #include <QMainWindow>
 
-class QTreeWidget;
+class QTreeView;
 class QAction;
 class QMenu;
 class QToolBar;
@@ -15,7 +15,7 @@ public:
 	//WMWindow(const QString &fileName);
 
 protected:
-     void closeEvent(QCloseEvent *event);
+	void closeEvent(QCloseEvent *event);
 
 private:
 	// Инициализация
@@ -29,7 +29,7 @@ private:
 	void readSettings ();
 	void writeSettings ();
 
-	QTreeWidget *tree;
+	QTreeView *tree;
 
 	QAction *newAct;
 	QAction *openAct;

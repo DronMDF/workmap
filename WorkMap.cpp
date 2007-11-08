@@ -1,5 +1,4 @@
 
-#include <QLabel>
 #include <QObject>
 
 #include "WMApplication.h"
