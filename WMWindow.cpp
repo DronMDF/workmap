@@ -13,6 +13,10 @@ WMWindow::WMWindow()
 	init();
 }
 
+WMWindow::~WMWindow()
+{
+}
+
 void WMWindow::closeEvent (QCloseEvent *event)
 {
 	writeSettings ();

@@ -14,6 +14,8 @@ public:
 	WMWindow();
 	//WMWindow(const QString &fileName);
 
+	virtual ~WMWindow();
+
 protected:
 	void closeEvent(QCloseEvent *event);
 
