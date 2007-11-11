@@ -11,8 +11,8 @@ int main (int argc, char **argv)
 	//WMApplication app(argc, argv);
 	QApplication app(argc, argv);
 
-	WMWindow win;
-	win.show();
+	WMWindow *win = new WMWindow;
+	win->show();
 
 	return app.exec();
 }

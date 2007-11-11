@@ -5,6 +5,7 @@ class QTreeView;
 class QAction;
 class QMenu;
 class QToolBar;
+class QTextEdit;
 
 class WMWindow : public QMainWindow
 {
@@ -12,48 +13,49 @@ class WMWindow : public QMainWindow
 
 public:
 	WMWindow();
-	//WMWindow(const QString &fileName);
-
 	virtual ~WMWindow();
 
 protected:
-	void closeEvent(QCloseEvent *event);
+	virtual void closeEvent(QCloseEvent *event);
+
+private slots:
+	void newFile();
+	void open();
+	bool save();
+	bool saveAs();
+	void about();
+	void documentWasModified();
 
 private:
-	// Инициализация
-	void init();
 	void createActions();
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
+	void readSettings();
+	void writeSettings();
+	bool maybeSave();
+	void loadFile(const QString &fileName);
+	bool saveFile(const QString &fileName);
+	void setCurrentFile(const QString &fileName);
+	QString strippedName(const QString &fullFileName);
 
-	// Настройки
-	void readSettings ();
-	void writeSettings ();
-
+	QTextEdit *textEdit QT_DEPRECATED_VARIABLE;
 	QTreeView *tree;
-
-	QAction *newAct;
-	QAction *openAct;
-	QAction *saveAct;
-	QAction *saveAsAct;
-	QAction *closeAct;
-	QAction *exitAct;
-	QAction *aboutAct;
-	QAction *aboutQtAct;
+	QString curFile;
 
 	QMenu *fileMenu;
 	QMenu *editMenu;
 	QMenu *helpMenu;
-
 	QToolBar *fileToolBar;
 	QToolBar *editToolBar;
-
-private slots:
-	void newFile();
-	void openFile();
-	bool saveFile();
-	bool saveFileAs();
-	void about();
-	void documentWasModified();
+	QAction *newAct;
+	QAction *openAct;
+	QAction *saveAct;
+	QAction *saveAsAct;
+	QAction *exitAct;
+	QAction *cutAct;
+	QAction *copyAct;
+	QAction *pasteAct;
+	QAction *aboutAct;
+	QAction *aboutQtAct;
 };
