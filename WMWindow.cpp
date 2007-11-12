@@ -1,7 +1,7 @@
 
 #include <QtGui>
 
-#include <modeltest.h>
+//#include <modeltest.h>
 
 #include "WMWindow.h"
 #include "WMSettings.h"
@@ -11,7 +11,7 @@
 WMWindow::WMWindow()
 {
 	WMModel *model = new WMModel ();
-	ModelTest test(model);
+//	ModelTest test(model);
 
 	tree = new QTreeView ();
 	tree->setModel (model);
