@@ -19,10 +19,12 @@ public:
 	QVariant data(int column) const;
 	bool setData(int column, const QVariant &value);
 
-	bool insertChildren(int position, int count, int columns);
+	bool insertChildren(int position, int count);
 	bool removeChildren(int position, int count);
 
 private:
 	QList<WMItem *> childItems;
 	WMItem *parentItem;
+
+	QString name;
 };

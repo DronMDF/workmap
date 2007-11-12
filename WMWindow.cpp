@@ -1,7 +1,7 @@
 
 #include <QtGui>
 
-//#include <modeltest.h>
+#include <modeltest.h>
 
 #include "WMWindow.h"
 #include "WMSettings.h"
@@ -11,12 +11,12 @@
 WMWindow::WMWindow()
 {
 	WMModel *model = new WMModel ();
-//	ModelTest test(model);
+	ModelTest test(model);
 
-	tree = new QTreeView ();
-	tree->setModel (model);
+	view = new QTreeView ();
+	view->setModel (model);
 
-	setCentralWidget(tree);
+	setCentralWidget(view);
 
 	// Временно но задепрекатим.
 	textEdit = new QTextEdit;
@@ -97,6 +97,44 @@ void WMWindow::documentWasModified()
 	setWindowModified(true);
 }
 
+void WMWindow::insertWork()
+{
+	QModelIndex index = view->selectionModel()->currentIndex();
+	QAbstractItemModel *model = view->model();
+
+	if (!model->insertRow(index.row() + 1, index.parent())) {
+		QMessageBox::warning (this, tr("warning"), tr("Unable to insert item"));
+		return;
+	}
+
+	QModelIndex child = model->index(index.row()+1, 0, index.parent());
+	model->setData (child, QVariant(tr("unnamed")));
+
+	updateActions();
+}
+
+void WMWindow::insertSub()
+{
+	QModelIndex index = view->selectionModel()->currentIndex();
+	QAbstractItemModel *model = view->model();
+
+	if (model->columnCount(index) == 0) {
+		if (!model->insertColumn(0, index))
+		return;
+	}
+
+	if (!model->insertRow(0, index))
+		return;
+
+	QModelIndex child = model->index(0, 0, index);
+	model->setData (child, QVariant(tr("unnamed")));
+
+	view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
+					QItemSelectionModel::ClearAndSelect);
+	updateActions();
+}
+
+
 void WMWindow::createActions()
 {
 	newAct = new QAction(QIcon(":/images/new.png"), tr("&New"), this);
@@ -155,6 +193,21 @@ void WMWindow::createActions()
 		cutAct, SLOT(setEnabled(bool)));
 	connect(textEdit, SIGNAL(copyAvailable(bool)),
 		copyAct, SLOT(setEnabled(bool)));
+
+	insertWorkAct = new QAction (tr("Insert work"), this);
+	//insertWorkAct->setShortcut (Qt::Key_Enter);
+	insertWorkAct->setShortcut (Qt::Key_Return);
+	insertWorkAct->setStatusTip (tr("Insert new work at some level"));
+	connect (insertWorkAct, SIGNAL (triggered()), this, SLOT(insertWork()));
+
+	insertSubAct = new QAction (tr("Insert subwork"), this);
+	insertSubAct->setShortcut (Qt::Key_Insert);
+	insertSubAct->setStatusTip (tr("Insert new subwork"));
+	connect (insertSubAct, SIGNAL (triggered()), this, SLOT(insertSub()));
+}
+
+void WMWindow::updateActions ()
+{
 }
 
 void WMWindow::createMenus()
@@ -167,10 +220,14 @@ void WMWindow::createMenus()
 	fileMenu->addSeparator();
 	fileMenu->addAction(exitAct);
 
-	editMenu = menuBar()->addMenu(tr("&Edit"));
-	editMenu->addAction(cutAct);
-	editMenu->addAction(copyAct);
-	editMenu->addAction(pasteAct);
+// 	editMenu = menuBar()->addMenu(tr("&Edit"));
+// 	editMenu->addAction(cutAct);
+// 	editMenu->addAction(copyAct);
+// 	editMenu->addAction(pasteAct);
+
+	actionMenu = menuBar()->addMenu (tr("&Action"));
+	actionMenu->addAction (insertWorkAct);
+	actionMenu->addAction (insertSubAct);
 
 	menuBar()->addSeparator();
 
@@ -186,10 +243,10 @@ void WMWindow::createToolBars()
 	fileToolBar->addAction(openAct);
 	fileToolBar->addAction(saveAct);
 
-	editToolBar = addToolBar(tr("Edit"));
-	editToolBar->addAction(cutAct);
-	editToolBar->addAction(copyAct);
-	editToolBar->addAction(pasteAct);
+// 	editToolBar = addToolBar(tr("Edit"));
+// 	editToolBar->addAction(cutAct);
+// 	editToolBar->addAction(copyAct);
+// 	editToolBar->addAction(pasteAct);
 }
 
 void WMWindow::createStatusBar()

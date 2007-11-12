@@ -38,15 +38,21 @@ int WMItem::childNumber() const
 
 QVariant WMItem::data(int column) const
 {
+	if (column == 0)
+		return name;
+
 	return QVariant(QObject::tr("item data"));
 }
 
 bool WMItem::setData(int column, const QVariant &value)
 {
+	Q_ASSERT (column == 0);
+
+	name = value.toString();
 	return true;
 }
 
-bool WMItem::insertChildren(int position, int count, int columns)
+bool WMItem::insertChildren (int position, int count)
 {
 	if (position < 0 || position > childItems.size())
 		return false;

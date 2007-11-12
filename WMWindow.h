@@ -26,8 +26,12 @@ private slots:
 	void about();
 	void documentWasModified();
 
+	void insertWork();
+	void insertSub();
+
 private:
 	void createActions();
+	void updateActions ();
 	void createMenus();
 	void createToolBars();
 	void createStatusBar();
@@ -39,13 +43,17 @@ private:
 	void setCurrentFile(const QString &fileName);
 	QString strippedName(const QString &fullFileName);
 
+
 	QTextEdit *textEdit QT_DEPRECATED_VARIABLE;
-	QTreeView *tree;
 	QString curFile;
+
+	QTreeView *view;
 
 	QMenu *fileMenu;
 	QMenu *editMenu;
+	QMenu *actionMenu;
 	QMenu *helpMenu;
+
 	QToolBar *fileToolBar;
 	QToolBar *editToolBar;
 	QAction *newAct;
@@ -58,4 +66,7 @@ private:
 	QAction *pasteAct;
 	QAction *aboutAct;
 	QAction *aboutQtAct;
+
+	QAction *insertWorkAct;
+	QAction *insertSubAct;
 };
