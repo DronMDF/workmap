@@ -98,7 +98,7 @@ int WMModel::rowCount(const QModelIndex &parent) const
 WMItem *WMModel::getItem(const QModelIndex &index) const
 {
 	if (index.isValid()) {
-		if (WMItem *item = static_cast<WMItem*>(index.internalPointer()))
+		if (WMItem *item = static_cast<WMItem *>(index.internalPointer()))
 			return item;
 	}
 

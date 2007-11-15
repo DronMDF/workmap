@@ -102,13 +102,16 @@ void WMWindow::insertWork()
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
 
-	if (!model->insertRow(index.row() + 1, index.parent())) {
+	const int row = index.row() + 1;
+	if (!model->insertRow(row, index.parent())) {
 		QMessageBox::warning (this, tr("warning"), tr("Unable to insert item"));
 		return;
 	}
 
-	QModelIndex child = model->index(index.row()+1, 0, index.parent());
+	QModelIndex child = model->index(row, 0, index.parent());
 	model->setData (child, QVariant(tr("unnamed")));
+	view->selectionModel()->setCurrentIndex(child,
+		QItemSelectionModel::ClearAndSelect);
 
 	updateActions();
 }
@@ -120,17 +123,19 @@ void WMWindow::insertSub()
 
 	if (model->columnCount(index) == 0) {
 		if (!model->insertColumn(0, index))
-		return;
+			return;
 	}
 
-	if (!model->insertRow(0, index))
+	const int row = model->rowCount(index);
+	if (!model->insertRow(row, index))
 		return;
 
-	QModelIndex child = model->index(0, 0, index);
+	QModelIndex child = model->index(row, 0, index);
 	model->setData (child, QVariant(tr("unnamed")));
 
-	view->selectionModel()->setCurrentIndex(model->index(0, 0, index),
-					QItemSelectionModel::ClearAndSelect);
+	view->selectionModel()->setCurrentIndex(child,
+		QItemSelectionModel::ClearAndSelect);
+
 	updateActions();
 }
 
@@ -208,6 +213,12 @@ void WMWindow::createActions()
 
 void WMWindow::updateActions ()
 {
+	QModelIndex index = view->selectionModel()->currentIndex();
+
+	statusBar()->showMessage(
+		QString("current row: %1, column: %2")
+			.arg(index.row())
+			.arg(index.column()));
 }
 
 void WMWindow::createMenus()
