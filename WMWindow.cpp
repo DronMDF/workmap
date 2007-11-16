@@ -16,6 +16,10 @@ WMWindow::WMWindow()
 	view = new QTreeView ();
 	view->setModel (model);
 
+	view->setEditTriggers(QAbstractItemView::DoubleClicked
+				| QAbstractItemView::SelectedClicked
+				| QAbstractItemView::EditKeyPressed);
+
 	setCentralWidget(view);
 
 	// Временно но задепрекатим.
@@ -99,6 +103,9 @@ void WMWindow::documentWasModified()
 
 void WMWindow::insertWork()
 {
+// 	if (view->state() == QAbstractItemView::EditingState)
+// 		return;
+
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
 
@@ -118,6 +125,9 @@ void WMWindow::insertWork()
 
 void WMWindow::insertSub()
 {
+// 	if (view->state() == QAbstractItemView::EditingState)
+// 		return;
+
 	QModelIndex index = view->selectionModel()->currentIndex();
 	QAbstractItemModel *model = view->model();
 

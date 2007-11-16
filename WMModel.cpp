@@ -32,10 +32,10 @@ QVariant WMModel::headerData(int section, Qt::Orientation orientation,
 
 Qt::ItemFlags WMModel::flags(const QModelIndex &index) const
 {
-	if (index.isValid())
-		return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+	if (!index.isValid())
+		return 0;
 
-	return 0;
+	return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
 int WMModel::columnCount(const QModelIndex &parent) const
