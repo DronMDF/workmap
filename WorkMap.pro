@@ -8,4 +8,4 @@ RESOURCES = WMResources.qrc
 
 TARGET = WorkMap
 
-include (../Test/modeltest-0.1/modeltest.pri)
+include ($(HOME)/Test/modeltest-0.1/modeltest.pri)
